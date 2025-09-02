@@ -1,13 +1,25 @@
 import pool from "../config/db.js";
 
 
+// export const getProfileByStudentId = async (studentId) => {
+//   const [rows] = await pool.query(
+//     "SELECT * FROM student_profiles WHERE student_id = ?",
+//     [studentId]
+//   );
+//   return rows[0] || null; 
+// };
 export const getProfileByStudentId = async (studentId) => {
   const [rows] = await pool.query(
-    "SELECT * FROM student_profiles WHERE student_id = ?",
+    `SELECT s.name, s.rollnumber, s.class, p.* 
+     FROM students s
+     LEFT JOIN student_profiles p ON s.id = p.student_id
+     WHERE s.id = ?`,
     [studentId]
   );
-  return rows[0] || null; 
+  return rows[0] || null;
 };
+
+
 
 
 export const createProfile = async (studentId, data) => {

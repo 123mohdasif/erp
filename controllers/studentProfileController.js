@@ -11,6 +11,8 @@ export const getMyProfile = async (req, res) => {
     const studentId = decoded.id;
 
     const profile = await getProfileByStudentId(studentId);
+    console.log(profile);
+    
     return res.status(200).json({ profile: profile || {} });
   } catch (err) {
     console.error(err);
