@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
 import './App.css'
+
+import TextType from './animations/TextType.jsx';
 
 
 
@@ -87,7 +88,21 @@ function App() {
         <div className='w-full md:w-1/2 flex flex-col justify-center p-8 sm:p-12 lg:p-16'>
           <div className='w-full max-w-md mx-auto'>
 
-            <h1 className='text-3xl font-bold leading-tight text-center sm:text-4xl'>Welcome to ERP</h1>
+
+            <TextType
+              as="h1"
+              className="text-3xl font-bold mb-2 h-10 leading-tight"
+              text={["Welcome to the Student Portal", "Create Your Account", "Join Us Today!"]}
+              textColors={['#111827']}
+              typingSpeed={75}
+              pauseDuration={1500}
+              showCursor={true}
+              cursorCharacter="|"
+              loop={true}
+            />
+
+
+
             <p className="text-gray-600 mb-8">
               Already have an account?{' '}
               <a href="#" className="text-blue-600 hover:underline">
@@ -208,18 +223,18 @@ function App() {
 
         </div>
 
-        <div 
-        className="hidden md:flex w-1/2 bg-gray-900 bg-cover bg-center"
-        // An inline style is used to set the background image.
-        // You should replace the placeholder URL with the actual URL of your image.
-        style={{ backgroundImage: "url('https://images.hdqwalls.com/wallpapers/minimalistic-dark-3d-di.jpg')" }}
-      >
-         {/* This div is now intentionally empty. The image is its background. */}
+        <div
+          className="hidden md:flex w-1/2 bg-gray-900 bg-cover bg-center"
+          // An inline style is used to set the background image.
+          // You should replace the placeholder URL with the actual URL of your image.
+          style={{ backgroundImage: "url('https://images.hdqwalls.com/wallpapers/minimalistic-dark-3d-di.jpg')" }}
+        >
+          {/* This div is now intentionally empty. The image is its background. */}
+        </div>
       </div>
-    </div>
 
 
-     
+
 
     </>
   )
