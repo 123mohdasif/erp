@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-
+import { Link } from 'react-router-dom';
 
 import TextType from '../animations/TextType.jsx';
 
@@ -208,9 +208,10 @@ function SignUp() {
               {/* Alternative log in link at the bottom */}
               <p className="text-center text-gray-600 mt-6">
                 Already have an account?{' '}
-                <a href="#" className="text-blue-600 hover:underline">
-                  Log in
-                </a>
+                
+                <Link to="/signin" className='text-blue-600 font-semibold underline hover:text-blue-800 transition-colors'>
+                  Login
+                </Link>
               </p>
 
 
