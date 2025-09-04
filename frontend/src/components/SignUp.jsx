@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState,useEffect} from 'react'
 
 import { Link } from 'react-router-dom';
 
@@ -16,6 +16,7 @@ const EyeIcon = ({ size = 20, ...props }) => (
     stroke="currentColor" // The stroke color will be the same as the parent's text color.
     strokeWidth="2"
     strokeLinecap="round"
+    
     strokeLinejoin="round"
     {...props} // Spreads any other passed-in props (like className) onto the SVG element.
   >
@@ -48,7 +49,6 @@ const EyeOffIcon = ({ size = 20, ...props }) => (
 
 function SignUp() {
   const [login, successLogin] = useState(false);
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rollNumber, setRollNumber] = useState('');
