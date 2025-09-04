@@ -5,7 +5,7 @@ import { createStudent, findStudentByEmail } from "../model/studentModel.js";
 // Register student
 export const registerStudent = async (req, res) => {
   try {
-    const { name, email, password, rollnumber, class: studentClass } = req.body;
+    const { name, email, password, rollNumber, class: studentClass } = req.body;
 
     const existing = await findStudentByEmail(email);
     if (existing) return res.status(400).json({ message: "Student already exists" });
@@ -16,7 +16,7 @@ export const registerStudent = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      rollnumber,
+      rollnumber: rollNumber,
       class: studentClass
     });
 
