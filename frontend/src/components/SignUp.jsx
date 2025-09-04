@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react'
 
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 import TextType from '../animations/TextType.jsx';
 
@@ -61,6 +62,25 @@ function SignUp() {
   const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password); // Checks for a special character.
   const hasNumber = /\d/.test(password); // Checks for at least one number.
 
+
+
+  async function signUp() {
+
+      const res = await axios.post('http://localhost:5000/api/students/register', {
+        name:"KUSHAL",
+        email,
+        password,
+        rollNumber,
+        className
+      });
+      console.log(res); 
+
+  }
+
+
+  useEffect(() => {
+    signUp();
+  }, [login]);
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
@@ -201,6 +221,7 @@ function SignUp() {
               <button
                 type="submit" // This button will submit the form when clicked.
                 className="w-full bg-gray-800 text-white py-3 rounded-lg font-semibold hover:bg-gray-900 transition-colors"
+                onClick={() => successLogin(true)}
               >
                 Create an account
               </button>
@@ -209,7 +230,7 @@ function SignUp() {
               <p className="text-center text-gray-600 mt-6">
                 Already have an account?{' '}
                 
-                <Link to="/signin" className='text-blue-600 font-semibold underline hover:text-blue-800 transition-colors'>
+                <Link to="/signin" className='text-blue-600 font-semibold underline hover:text-blue-800 transition-colors' >
                   Login
                 </Link>
               </p>
