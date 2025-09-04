@@ -1,6 +1,13 @@
+<<<<<<< HEAD
 import { useState,useEffect} from 'react'
+=======
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
+>>>>>>> edcd465273ded5ae3cfce95f8fdd97d252e71e11
 
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+
 
 import TextType from '../animations/TextType.jsx';
 
@@ -49,6 +56,14 @@ const EyeOffIcon = ({ size = 20, ...props }) => (
 
 function SignUp() {
   const [login, successLogin] = useState(false);
+<<<<<<< HEAD
+=======
+  const navigate = useNavigate();
+  const [error, setError] = useState(''); // State to hold error messages
+
+  const [name, setName] = useState('');
+
+>>>>>>> edcd465273ded5ae3cfce95f8fdd97d252e71e11
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rollNumber, setRollNumber] = useState('');
@@ -61,6 +76,33 @@ function SignUp() {
   const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password); // Checks for a special character.
   const hasNumber = /\d/.test(password); // Checks for at least one number.
 
+
+const handleSubmit = async (event) => {
+    // 3. Prevent the default page reload
+    event.preventDefault();
+    setError(''); // Clear previous errors
+
+    // 4. Wrap the API call in a try...catch block for error handling
+    try {
+      const res = await axios.post('http://localhost:5000/api/students/register', {
+        name,
+        email,
+        password,
+        rollNumber,
+        className
+      });
+      console.log('Registration Successful:', res.data);
+      // Redirect to the sign-in page after a successful registration
+      navigate('/signin');
+    } catch (err) {
+      console.error('Registration Failed:', err);
+      // Set an error message to display to the user
+      setError(err.response?.data?.message || 'An unexpected error occurred.');
+    }
+  };
+
+
+  
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
@@ -111,6 +153,22 @@ function SignUp() {
             </p>
 
             <form action="">
+
+
+
+              <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="className">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    value={name} // Binds the value to the 'className' state.
+                    onChange={(e) => setName(e.target.value)} // Updates the 'className' state on change.
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
+                    
+                  />
+                </div>
 
               <div className='mb-4'>
 
@@ -201,6 +259,7 @@ function SignUp() {
               <button
                 type="submit" // This button will submit the form when clicked.
                 className="w-full bg-gray-800 text-white py-3 rounded-lg font-semibold hover:bg-gray-900 transition-colors"
+                onClick={handleSubmit}
               >
                 Create an account
               </button>
@@ -209,7 +268,7 @@ function SignUp() {
               <p className="text-center text-gray-600 mt-6">
                 Already have an account?{' '}
                 
-                <Link to="/signin" className='text-blue-600 font-semibold underline hover:text-blue-800 transition-colors'>
+                <Link to="/signin" className='text-blue-600 font-semibold underline hover:text-blue-800 transition-colors' >
                   Login
                 </Link>
               </p>
