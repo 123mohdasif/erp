@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 
-
+import Dashboard from './components/DashBoard.jsx';
 import FuzzyText from './animations/FuzzyText.jsx';
 import SignUp from './components/SignUp.jsx';
 import SignIn from './components/SignIn.jsx';
@@ -11,6 +11,7 @@ function App() {
       <Route path='/signup' element={<SignUp />} />
       <Route path='/signin' element={<SignIn />} />
       <Route path='/' element={<SignUp />} />
+      <Route path='/dashboard' element={<Dashboard />} />
       
       {/* Catch-all 404 Route */}
       <Route
