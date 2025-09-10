@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-import { useState,useEffect} from 'react'
-=======
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
->>>>>>> edcd465273ded5ae3cfce95f8fdd97d252e71e11
 
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -56,14 +52,14 @@ const EyeOffIcon = ({ size = 20, ...props }) => (
 
 function SignUp() {
   const [login, successLogin] = useState(false);
-<<<<<<< HEAD
-=======
+// <<<<<<< HEAD
+// =======
   const navigate = useNavigate();
   const [error, setError] = useState(''); // State to hold error messages
 
   const [name, setName] = useState('');
 
->>>>>>> edcd465273ded5ae3cfce95f8fdd97d252e71e11
+// >>>>>>> edcd465273ded5ae3cfce95f8fdd97d252e71e11
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rollNumber, setRollNumber] = useState('');
