@@ -1,20 +1,18 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
-// import { getProfile, upsertProfile } from "../api/studentApi"; // Temporarily disabled to fix build error
-// import "./Profile.css"; // Temporarily disabled to fix build error
+// The following imports are commented out because the files are not available 
+// in this environment. In your actual project, you would uncomment them.
+// import { getProfile, upsertProfile } from "../api/studentApi";
+// import "./Profile.css";
 
-// Mock API functions to allow the component to render without breaking.
-// In your actual application, you would use the real import above.
-const getProfile = async (token) => {
-  console.log("Mock getProfile called with token:", token);
-  // Return a resolved promise that simulates a successful but empty API call.
-  return Promise.resolve({ data: { profile: null } }); 
-};
+// --- MOCK API FUNCTIONS ---
+// These are temporary replacements for the real API calls to allow the component to run.
+const getProfile = (token) =>
+  axios.get("http://localhost:5000/api/students/profile/get", { headers: { Authorization: `Bearer ${token}` } });
 
-const upsertProfile = async (token, data) => {
-  console.log("Mock upsertProfile called with token and data:", token, data);
-  // Return a resolved promise that simulates a successful API call.
-  return Promise.resolve({ data: { message: "Profile saved successfully (mock)" } });
-};
+const upsertProfile = (token, data) =>
+  axios.post("http://localhost:5000/api/students/profile/upsert", data, { headers: { Authorization: `Bearer ${token}` } });
+// --- END MOCK API FUNCTIONS ---
 
 
 export default function Profile() {
@@ -104,7 +102,7 @@ export default function Profile() {
   if (loading) return <div className="w-full h-full flex justify-center items-center"><p>Loading...</p></div>;
 
   return (
-    <div className="w-full h-full p-8 rounded-xl bg-white shadow-lg hover:shadow-2xl transition-all duration-300">
+    <div className="w-full p-8 rounded-xl bg-white shadow-lg hover:shadow-2xl transition-all duration-300">
       <h2 className="text-center mb-6 text-2xl font-bold text-blue-500 drop-shadow">
         Student Profile
       </h2>
