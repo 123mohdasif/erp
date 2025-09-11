@@ -58,6 +58,10 @@ function SignIn() { // <-- Corrected function name
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const [role,SetRole]=useState('');
+
+
+    
 
     const hasEightChars = password.length >= 8;
     const hasUpperCase = /[A-Z]/.test(password);
