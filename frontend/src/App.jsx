@@ -7,6 +7,12 @@ import Dashboard from "./components/Dashboard.jsx";
 import FuzzyText from "./animations/FuzzyText.jsx";
 import SignUp from "./components/SignUp.jsx";
 import SignIn from "./components/SignIn.jsx";
+import Profile from "./pages/Profile.jsx";
+import Attendance from "./pages/Attendance.jsx";
+import CalendarPage from "./pages/CalendarPage.jsx";
+import Assignments from "./pages/Assignments.jsx";
+import Fees from "./pages/Fees.jsx";
+
 
 function App() {
   return (
@@ -16,7 +22,14 @@ function App() {
       <Route path="/" element={<SignUp />} />
 
       {/* Dashboard with nested routes */}
-      <Route path="/dashboard/*" element={<Dashboard />} />
+      <Route path="/dashboard" element={<Dashboard />}>
+        <Route index element={<h1 className="text-2xl font-bold">Welcome to Dashboard</h1>} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="attendance" element={<Attendance />} />
+        <Route path="calendar" element={<CalendarPage />} />
+        <Route path="assignments" element={<Assignments />} />
+        <Route path="fees" element={<Fees />} />
+      </Route>
 
       {/* Catch-all 404 Route */}
       <Route

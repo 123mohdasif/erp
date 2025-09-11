@@ -1,43 +1,31 @@
-
 import React from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { Routes, Route } from "react-router-dom";
-import AppSidebar from "./AppSidebar";
-
-
-import Profile from "../pages/Profile";
-import Attendance from "../pages/Attendance";
-import CalendarPage from "../pages/CalendarPage";
-import Assignments from "../pages/Assignments";
-import Fees from "../pages/Fees";
+import { Outlet } from "react-router-dom";
+// FIX: Changed the import to use the project's path alias, which is standard for shadcn/ui.
+// This resolves the "Could not resolve" error by looking for the component in the correct directory.
+import AppSidebar from "@/components/AppSidebar";
 
 const Dashboard = () => {
   return (
+    // The SidebarProvider creates the main flex container for the page.
+    // The AppSidebar and the <main> element should be its direct children.
     <SidebarProvider>
-      <div className="flex h-screen">
+      
+      {/* AppSidebar is the first flex item. It renders the sidebar and its placeholder gap. */}
+      <AppSidebar />
 
-        <AppSidebar />
-
-        <main className="flex-1 p-4">
-          <SidebarTrigger />
-
-          <Routes>
-            <Route
-              path="/"
-              element={<h1 className="text-2xl font-bold">Welcome to Dashboard</h1>}
-            />
-            <Route path="profile" element={<Profile />} />
-            <Route path="attendance" element={<Attendance />} />
-            <Route path="calendar" element={<CalendarPage />} />
-            <Route path="assignments" element={<Assignments />} />
-            <Route path="fees" element={<Fees />} />
-          </Routes>
-        </main>
-      </div>
+      {/* The <main> content area is the second flex item. 
+          The "flex-1" class tells it to grow and fill all remaining space. */}
+      <main className="flex-1 p-6 overflow-y-auto bg-gray-50">
+        <SidebarTrigger />
+        <div className="w-full h-full">
+          <Outlet />
+        </div>
+      </main>
+      
     </SidebarProvider>
   );
 };
 
 export default Dashboard;
-
 
