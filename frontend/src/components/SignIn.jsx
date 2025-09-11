@@ -5,7 +5,10 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 
-import TextType from '../animations/TextType.jsx';
+// Mock TextType component since the original is not available.
+const TextType = ({ as: Component = 'h1', text, ...props }) => {
+    return <Component {...props}>{Array.isArray(text) ? text[0] : text}</Component>;
+};
 
 
 
@@ -49,19 +52,14 @@ const EyeOffIcon = ({ size = 20, ...props }) => (
     </svg>
 );
 
-// ...existing code...
-function SignIn() { // <-- Corrected function name
-    const [login, successLogin] = useState(false);
+function SignIn() {
     const navigate = useNavigate();
     const [error, setError] = useState(''); // State to hold error messages
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(false);
-    const [role,SetRole]=useState('');
-
-
-    
+    const [role, setRole] = useState('student'); // Default role is 'student'
 
     const hasEightChars = password.length >= 8;
     const hasUpperCase = /[A-Z]/.test(password);
@@ -73,8 +71,18 @@ function SignIn() { // <-- Corrected function name
         event.preventDefault();
         setError('');
 
+        if (!role) {
+            setError('Please select a role.');
+            return;
+        }
+
+        // Determine the correct API endpoint based on the selected role
+        const endpoint = role === 'student' 
+            ? 'http://localhost:5000/api/students/login' 
+            : 'http://localhost:5000/api/teachers/login';
+
         try {
-            const response = await axios.post('http://localhost:5000/api/students/login', {
+            const response = await axios.post(endpoint, {
                 email,
                 password,
             });
@@ -83,7 +91,8 @@ function SignIn() { // <-- Corrected function name
 
             if (token) {
                 localStorage.setItem('token', token);
-                console.log('Token stored successfully!');
+                localStorage.setItem('role', role); // Store the role as well
+                console.log('Token and role stored successfully!');
                 navigate('/dashboard');
             } else {
                 setError('Login successful, but no token received.');
@@ -115,7 +124,7 @@ function SignIn() { // <-- Corrected function name
                         <TextType
                             as="h1"
                             className="text-3xl font-bold mb-2 h-10 leading-tight"
-                            text={["Welcome to the Student Portal", "Sign In to Your Account", "Join Us Today!"]}
+                            text={["Welcome to the Portal", "Sign In to Your Account", "Access Your Dashboard"]}
                             textColors={['#111827']}
                             typingSpeed={75}
                             pauseDuration={1500}
@@ -125,6 +134,18 @@ function SignIn() { // <-- Corrected function name
                         />
 
                         <form onSubmit={handleSignIn}>
+                            <div className='mb-4'>
+                                <label className='block text-sm font-medium text-gray-700 mb-1'>Role</label>
+                                <select
+                                    value={role}
+                                    onChange={(e) => setRole(e.target.value)}
+                                    className='w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
+                                >
+                                    <option value="student">Student</option>
+                                    <option value="teacher">Teacher</option>
+                                </select>
+                            </div>
+
                             <div className='mb-4'>
                                 <label className='block text-sm font-medium text-gray-700 mb-1'>Email</label>
                                 <input
@@ -156,7 +177,6 @@ function SignIn() { // <-- Corrected function name
                                         aria-label="Toggle password visibility"
                                     >
                                         {passwordVisible ? <EyeOffIcon /> : <EyeIcon />}
-                                        <span className="ml-2 text-sm">Hide</span>
                                     </button>
                                 </div>
                             </div>

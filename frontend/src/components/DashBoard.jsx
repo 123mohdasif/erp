@@ -6,6 +6,8 @@ import { Outlet } from "react-router-dom";
 import AppSidebar from "@/components/AppSidebar";
 
 const Dashboard = () => {
+
+  const role=localStorage.getItem("role");
   return (
     // The SidebarProvider creates the main flex container for the page.
     // The AppSidebar and the <main> element should be its direct children.
