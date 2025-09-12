@@ -21,7 +21,7 @@ const Dashboard = () => {
       <main className="flex-1 p-6 overflow-y-auto bg-gray-50">
         <SidebarTrigger />
         <div className="w-full h-full">
-          <Outlet />
+          <Outlet  role={role}/>
         </div>
       </main>
       
