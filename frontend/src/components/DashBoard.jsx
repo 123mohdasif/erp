@@ -1,30 +1,35 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Outlet } from "react-router-dom";
-// FIX: Changed the import to use the project's path alias, which is standard for shadcn/ui.
-// This resolves the "Could not resolve" error by looking for the component in the correct directory.
-import AppSidebar from "@/components/AppSidebar";
+// FIX: The build environment could not resolve the path alias '@'.
+// Reverting to a relative path that was used previously.
+import AppSidebar from "./AppSidebar";
 
 const Dashboard = () => {
+  const [role, setRole] = useState(null);
 
-  const [user,SetUser]=useState(null);
+  useEffect(() => {
+    // We read from localStorage only once when the component mounts
+    // to ensure the role is set before rendering children.
+    const storedRole = localStorage.getItem("role");
+    if (storedRole) {
+      setRole(storedRole);
+    }
+  }, []);
 
-  const role=localStorage.getItem("role");
   return (
-    // The SidebarProvider creates the main flex container for the page.
-    // The AppSidebar and the <main> element should be its direct children.
     <SidebarProvider>
-      
-      {/* AppSidebar is the first flex item. It renders the sidebar and its placeholder gap. */}
-      <AppSidebar />
+      <AppSidebar role={role} />
 
-      {/* The <main> content area is the second flex item. 
-          The "flex-1" class tells it to grow and fill all remaining space. */}
       <main className="flex-1 p-6 overflow-y-auto bg-gray-50">
         <SidebarTrigger />
         <div className="w-full h-full">
-          <Outlet  role={role}/>
+          {/* Pass the role to child routes using the 'context' prop.
+            The Outlet will make this object available to any child component 
+            (like Assignments.jsx) that calls the useOutletContext() hook.
+          */}
+          <Outlet context={{ role }} />
         </div>
       </main>
       

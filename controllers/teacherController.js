@@ -2,8 +2,6 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { createTeacher, findTeacherByEmail, getTeacherById, getAllTeachers, updateTeacherProfile } from '../model/teacherModel.js';
 
-// ===== Existing =====
-
 // Teacher registration
 export const registerTeacher = async (req, res) => {
   try {
@@ -30,22 +28,36 @@ export const loginTeacher = async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, teacher.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+    
+    // The payload here is already correct.
+    const payload = { 
+      id: teacher.id, 
+      email: teacher.email, 
+      role: "teacher" 
+    };
 
     const token = jwt.sign(
-      { id: teacher.id, email: teacher.email, role: teacher.role || "teacher" },
+      payload,
       process.env.JWT_SECRET,
       { expiresIn: "5h" }
     );
+    
+    // --- FIX IS HERE ---
+    // Add 'role: "teacher"' to the response for the frontend.
+    res.status(200).json({ 
+      message: "Login successful", 
+      token: token,
+      role: "teacher"
+    });
+    // --- END FIX ---
 
-    res.status(200).json({ message: "Login successful", token });
-  } catch (error) {
+  } catch (error)
+   {
     res.status(500).json({ message: error.message });
   }
 };
 
-// ===== NEW PROFILE ENDPOINTS =====
-
-// Teacher: view own profile
+// Get own profile
 export const getProfile = async (req, res) => {
   try {
     const teacher = await getTeacherById(req.user.id);
@@ -55,7 +67,7 @@ export const getProfile = async (req, res) => {
   }
 };
 
-// Teacher: update own profile
+// Update own profile
 export const updateProfile = async (req, res) => {
   try {
     await updateTeacherProfile(req.user.id, req.body);

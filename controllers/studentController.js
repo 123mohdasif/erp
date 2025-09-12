@@ -38,13 +38,29 @@ export const loginStudent = async (req, res) => {
     const isMatch = await bcrypt.compare(password, student.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
+    // --- FIX IS HERE ---
+    // 1. Add 'role: "student"' to the JWT payload.
+    const payload = { 
+      id: student.id, 
+      email: student.email, 
+      name: student.name,
+      role: "student" 
+    };
+
     const token = jwt.sign(
-      { id: student.id, email: student.email, name: student.name },
+      payload,
       process.env.JWT_SECRET,
       { expiresIn: "5h" }
     );
+    
+    // 2. Add 'role: "student"' to the response for the frontend.
+    res.status(200).json({ 
+      message: "Login successful", 
+      token: token,
+      role: "student" 
+    });
+    // --- END FIX ---
 
-    res.status(200).json({ message: "Login successful", token });
   } catch (error) {
     console.error("Error logging in:", error);
     res.status(500).json({ message: error.message });
