@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Outlet } from "react-router-dom";
 // FIX: Changed the import to use the project's path alias, which is standard for shadcn/ui.
@@ -6,6 +7,8 @@ import { Outlet } from "react-router-dom";
 import AppSidebar from "@/components/AppSidebar";
 
 const Dashboard = () => {
+
+  const [user,SetUser]=useState(null);
 
   const role=localStorage.getItem("role");
   return (
