@@ -2,7 +2,9 @@ import {
   createAssignment, 
   getAssignments, 
   deleteAssignmentById,
-  createSubmission // Import the new model function
+  createSubmission,
+  // --- FIX ---: Add getSubmissionsByAssignmentId to the import list
+  getSubmissionsByAssignmentId 
 } from "../model/assignmentModel.js";
 import fs from "fs";
 import path from "path";
@@ -16,7 +18,7 @@ export const uploadAssignment = async (req, res) => {
 
     const { title, description } = req.body;
     const filePath = req.file.filename; 
-    const uploadedBy = req.user.id; // Comes from the 'protect' middleware     
+    const uploadedBy = req.user.id;   
 
     const assignmentId = await createAssignment({
       title,
@@ -51,6 +53,18 @@ export const deleteAssignment = async (req, res) => {
   }
 };
 
+export const viewSubmissions = async (req, res) => {
+  try {
+    const { id: assignmentId } = req.params;
+    // This line will now work because the function is imported
+    const submissions = await getSubmissionsByAssignmentId(assignmentId);
+    res.status(200).json(submissions);
+  } catch (err) {
+    console.error("Error fetching submissions:", err);
+    res.status(500).json({ message: "Server error while fetching submissions." });
+  }
+};
+
 
 // --- For Students & Teachers ---
 export const viewAssignments = async (req, res) => {
@@ -65,16 +79,15 @@ export const viewAssignments = async (req, res) => {
 
 
 // --- For Students ---
-// This is the new controller function for handling submissions.
 export const submitAssignment = async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No file was submitted." });
     }
 
-    const { id: assignment_id } = req.params; // Get assignment ID from URL
-    const { id: student_id } = req.user;      // Get student ID from token
-    const filePath = req.file.filename;       // Get filename from multer
+    const { id: assignment_id } = req.params;
+    const { id: student_id } = req.user;
+    const filePath = req.file.filename;
 
     const submissionId = await createSubmission({
       assignment_id,
@@ -92,3 +105,4 @@ export const submitAssignment = async (req, res) => {
     res.status(500).json({ message: "Server error during submission." });
   }
 };
+

@@ -52,14 +52,69 @@
 
 
 
+// import express from "express";
+// import { 
+//   uploadAssignment, 
+//   viewAssignments, 
+//   deleteAssignment,
+//   submitAssignment 
+// } from "../controllers/assignmentController.js";
+// // 1. Import the new, combined middleware function
+// import { protectAndAuthorize } from "../middleware/ass.js";
+// import upload from "../middleware/uploadMiddleware.js";
+// import path from "path";
+
+// const router = express.Router();
+
+// // --- Teacher Routes ---
+// router.post(
+//   "/upload",
+//   // 2. Use the single middleware for protection and authorization
+//   protectAndAuthorize("teacher"), 
+//   upload.single("assignmentFile"),
+//   uploadAssignment
+// );
+
+// router.delete("/:id", protectAndAuthorize("teacher"), deleteAssignment);
+
+// // --- Shared Routes ---
+// router.get("/view", protectAndAuthorize("student", "teacher"), viewAssignments);
+
+// // --- Student Route ---
+// router.post(
+//   "/:id/submit",
+//   protectAndAuthorize("student"),
+//   upload.single("submissionFile"),
+//   submitAssignment
+// );
+
+// // --- File Download Route ---
+// // NOTE: This route is currently unprotected. For enhanced security, you could add
+// // middleware here to verify that the logged-in user is enrolled in the course
+// // to which the assignment belongs before allowing the download.
+// router.get("/download/:filename", (req, res) => {
+//   const filePath = path.join("uploads/assignments", req.params.filename);
+//   res.download(filePath, (err) => {
+//     if (err) {
+//       console.error("File download error:", err);
+//       res.status(404).json({ message: "File not found." });
+//     }
+//   });
+// });
+
+// export default router;
+
+
+// assignmentRoutes.js
+
 import express from "express";
 import { 
   uploadAssignment, 
   viewAssignments, 
   deleteAssignment,
-  submitAssignment 
+  submitAssignment,
+  viewSubmissions // 1. Import the new controller function
 } from "../controllers/assignmentController.js";
-// 1. Import the new, combined middleware function
 import { protectAndAuthorize } from "../middleware/ass.js";
 import upload from "../middleware/uploadMiddleware.js";
 import path from "path";
@@ -69,13 +124,19 @@ const router = express.Router();
 // --- Teacher Routes ---
 router.post(
   "/upload",
-  // 2. Use the single middleware for protection and authorization
   protectAndAuthorize("teacher"), 
   upload.single("assignmentFile"),
   uploadAssignment
 );
 
 router.delete("/:id", protectAndAuthorize("teacher"), deleteAssignment);
+
+// 2. Add the new route for viewing submissions for a specific assignment
+router.get(
+    "/:id/submissions", 
+    protectAndAuthorize("teacher"), 
+    viewSubmissions
+);
 
 // --- Shared Routes ---
 router.get("/view", protectAndAuthorize("student", "teacher"), viewAssignments);
@@ -89,10 +150,8 @@ router.post(
 );
 
 // --- File Download Route ---
-// NOTE: This route is currently unprotected. For enhanced security, you could add
-// middleware here to verify that the logged-in user is enrolled in the course
-// to which the assignment belongs before allowing the download.
 router.get("/download/:filename", (req, res) => {
+  // Note: For security, you could also protect this route
   const filePath = path.join("uploads/assignments", req.params.filename);
   res.download(filePath, (err) => {
     if (err) {
