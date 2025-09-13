@@ -1,0 +1,51 @@
+.notifications-page {
+  max-width: 700px;
+  margin: 20px auto;
+  font-family: 'Arial', sans-serif;
+}
+
+.notifications-header {
+  /* text-align: center;
+  color: #333;
+  margin-bottom: 20px; */
+  text-align: center;
+  color: #333;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  margin: 10px 0;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.create-notification-form {
+  background: #e0f7fa;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.add-btn {
+  background: #00796b;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.add-btn:hover {
+  background: #004d40;
+}

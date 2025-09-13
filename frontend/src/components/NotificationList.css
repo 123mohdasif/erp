@@ -1,0 +1,83 @@
+.notification-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+.notification-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* No notifications message */
+.no-notifications {
+  text-align: center;
+  color: #777;
+}
+
+/* List reset */
+.notification-list {
+  list-style: none;
+  padding: 0;
+}
+
+/* Common item style */
+.notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 12px 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.notification-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.notification-item-title {
+  color: #222;
+  font-size: 16px;
+}
+
+.notification-item-desc {
+  margin: 5px 0 0 0;
+  color: #555;
+  font-size: 14px;
+}
+
+/* Teacher delete button */
+.delete-btn {
+  background: #ff4d4d;
+  border: none;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.delete-btn:hover {
+  background: #ff1a1a;
+}
+
+/* Student card specific style */
+.student-card {
+  background: linear-gradient(145deg, #a1c4fd, #c2e9fb);
+  color: #000;
+  flex-direction: column;
+  align-items: flex-start;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  padding: 15px 20px;
+  border-left: 5px solid #00796b;
+}
+
+.student-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}

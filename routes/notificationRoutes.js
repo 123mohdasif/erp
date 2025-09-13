@@ -8,10 +8,7 @@ import { protect, authorizeRoles } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// ✅ Health check
-router.get("/test", (req, res) => {
-  res.send("✅ Notifications route is working");
-});
+
 
 // Create notification (teachers only)
 router.post("/", protect, authorizeRoles("teacher"), createNotification);

@@ -8,7 +8,8 @@ import FuzzyText from "./animations/FuzzyText.jsx";
 import SignUp from "./components/SignUp.jsx";
 import SignIn from "./components/SignIn.jsx";
 import Profile from "./pages/Profile.jsx";
-import Attendance from "./pages/Attendance.jsx";
+// import Attendance from "./pages/Attendance.jsx";
+import Notifications from "./components/Notifications.jsx";
 import CalendarPage from "./pages/CalendarPage.jsx";
 import Assignments from "./pages/Assignments.jsx";
 import Fees from "./pages/Fees.jsx";
@@ -25,7 +26,7 @@ function App() {
       <Route path="/dashboard" element={<Dashboard />}>
         <Route index element={<h1 className="text-2xl font-bold">Welcome to Dashboard</h1>} />
         <Route path="profile" element={<Profile />} />
-        <Route path="attendance" element={<Attendance />} />
+        <Route path="notifications" element={<Notifications />} />
         <Route path="calendar" element={<CalendarPage />} />
         <Route path="assignments" element={<Assignments />} />
         <Route path="fees" element={<Fees />} />

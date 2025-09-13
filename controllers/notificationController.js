@@ -1,20 +1,22 @@
+
+
 import { createNotificationInDB, getNotificationsFromDB, deleteNotificationFromDB } from "../model/notificationModel.js";
 
 // Create notification (only teachers)
 export const createNotification = async (req, res) => {
   try {
-    const { title, description, target_role } = req.body;
-    const created_by = req.user.id; // comes from JWT
+    const { title, description } = req.body;
+    const created_by = req.user.id; // from JWT
 
-    if (!title || !description || !target_role) {
-      return res.status(400).json({ error: "All fields are required" });
+    if (!title || !description) {
+      return res.status(400).json({ error: "Title and description are required" });
     }
 
-    const notificationId = await createNotificationInDB({ title, description, target_role, created_by });
+    const notificationId = await createNotificationInDB({ title, description, created_by });
 
     res.status(201).json({ message: "Notification created successfully", notificationId });
   } catch (err) {
-    console.error("❌ Error in createNotification:", err);
+    console.error(" Error in createNotification:", err);
     res.status(500).json({ error: "Server error" });
   }
 };
@@ -22,11 +24,11 @@ export const createNotification = async (req, res) => {
 // Get notifications (teacher/student)
 export const getNotifications = async (req, res) => {
   try {
-    const role = req.user.role; // comes from JWT
+    const role = req.user.role; // from JWT
     const notifications = await getNotificationsFromDB(role);
     res.json(notifications);
   } catch (err) {
-    console.error("❌ Error in getNotifications:", err);
+    console.error("Error in getNotifications:", err);
     res.status(500).json({ error: "Server error" });
   }
 };
