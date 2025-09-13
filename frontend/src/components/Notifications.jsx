@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import NotificationList from "../components/NotificationList";
-import "./Notifications.css"; // import CSS
 
 function Notifications() {
   const [notifications, setNotifications] = useState([]);
@@ -10,6 +9,8 @@ function Notifications() {
 
   const role = localStorage.getItem("role")?.toLowerCase();
   const token = localStorage.getItem("token");
+
+  // --- No changes to your state or data fetching logic ---
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -35,6 +36,7 @@ function Notifications() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
+      // Refetch logic (same as original)
       const res = await axios.get("http://localhost:5000/api/notifications", {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -60,34 +62,65 @@ function Notifications() {
     }
   };
 
+  // --- NEW Tailwind UI Structure ---
+
   return (
-    <div className="notifications-page">
-      <h1 className="notifications-header">Notifications Module</h1>
+    // Page container, matching the light-gray content area from the inspiration
+    <div className="p-4 md:p-8 bg-slate-100 min-h-full">
+      {/* Page Header, matching the style of "Student Profile" */}
+      <h1 className="text-3xl font-bold text-slate-800 mb-6">
+        Notifications Module
+      </h1>
 
-      {role === "teacher" && (
-        <div className="create-notification-form">
-          <h3>Create Notification</h3>
-          <input
-            className="input-field"
-            placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+      {/* Main content grid: Form on the left, List on the right. Stacks on mobile. */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        {/* Conditional Form Card for Teachers */}
+        {role === "teacher" && (
+          // Card for the creation form
+          <div className="lg:col-span-1 bg-white p-6 rounded-lg shadow-md h-fit">
+            <h3 className="text-xl font-semibold text-slate-700 mb-5">
+              Create Notification
+            </h3>
+            <div className="space-y-4">
+              <input
+                type="text"
+                className="block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                placeholder="Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              <input
+                type="text"
+                className="block w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                placeholder="Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+              <button
+                className="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all"
+                onClick={handleAdd}
+              >
+                Add Notification
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Notification List Area */}
+        {/* Adjust column span if the teacher form is not present */}
+        <div
+          className={
+            role === "teacher" ? "lg:col-span-2" : "lg:col-span-3"
+          }
+        >
+          <NotificationList
+            notifications={notifications}
+            onDelete={handleDelete}
+            role={role}
           />
-          <input
-            className="input-field"
-            placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <button className="add-btn" onClick={handleAdd}>Add</button>
         </div>
-      )}
-
-      <NotificationList
-        notifications={notifications}
-        onDelete={handleDelete}
-        role={role}
-      />
+      </div>
     </div>
   );
 }
