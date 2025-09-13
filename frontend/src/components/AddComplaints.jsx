@@ -41,7 +41,7 @@ function AddComplaint({ onComplaintAdded }) {
         onChange={(e) => setTitle(e.target.value)}
       />
       <textarea
-        placeholder="Description"
+        placeholder="Please first wirte your Name, Roll Number and Class. Then write your issue here....If you don't mention your Name, Roll Number and Class-we will not consider your complaint and for this you will be responsible"
         value={description}
         required
         onChange={(e) => setDescription(e.target.value)}

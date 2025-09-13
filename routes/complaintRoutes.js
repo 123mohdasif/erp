@@ -11,9 +11,10 @@ router.post("/", protect, addComplaint);
 router.get("/my", protect, getMyComplaints);
 
 // Admin: view all complaints
-router.get("/", protect, authorizeRoles("admin"), getAllComplaints);
+router.get("/", protect, authorizeRoles("admin","teacher"), getAllComplaints);
 
 // Admin: update complaint status
-router.put("/:id/status", protect, authorizeRoles("admin"), updateStatus);
+router.put("/:id/status", protect, authorizeRoles("admin","teacher"), updateStatus);
+
 
 export default router;

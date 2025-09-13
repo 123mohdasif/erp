@@ -9,7 +9,7 @@ function ComplaintList({ role }) {
     try {
       const token = localStorage.getItem("token");
       const url =
-        role === "admin"
+        role === "teacher" || role === "admin"
           ? "http://localhost:5000/api/complaints"
           : "http://localhost:5000/api/complaints/my";
 

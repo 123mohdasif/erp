@@ -29,7 +29,7 @@ function ComplaintCard({ complaint, role, onStatusUpdate }) {
       <p>{complaint.description}</p>
       <p>Status: {status}</p>
 
-      {role === "admin" && (
+      {(role === "admin"||role==="teacher") && (
         <select value={status} onChange={handleStatusChange}>
           <option value="pending">Pending</option>
           <option value="resolved">Resolved</option>

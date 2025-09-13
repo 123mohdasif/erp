@@ -9,7 +9,7 @@ function Complaints() {
   return (
     <div>
       {role === "student" && <StudentComplaints />}
-      {role === "admin" && <TeacherComplaints />}
+      {(role === "admin" || role === "teacher") && <TeacherComplaints />}
       {!role && <p>Please log in to access complaints</p>}
     </div>
   );

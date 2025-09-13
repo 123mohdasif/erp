@@ -32,3 +32,4 @@ export const updateComplaintStatus = async (id, status) => {
     [status, id]
   );
 };
+
