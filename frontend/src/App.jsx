@@ -10,7 +10,7 @@ import SignIn from "./components/SignIn.jsx";
 import Profile from "./pages/Profile.jsx";
 // import Attendance from "./pages/Attendance.jsx";
 import Notifications from "./components/Notifications.jsx";
-import CalendarPage from "./pages/CalendarPage.jsx";
+import Complaints from "./Pages/Complaints.jsx";
 import Assignments from "./pages/Assignments.jsx";
 import Fees from "./pages/Fees.jsx";
 
@@ -27,7 +27,7 @@ function App() {
         <Route index element={<h1 className="text-2xl font-bold">Welcome to Dashboard</h1>} />
         <Route path="profile" element={<Profile />} />
         <Route path="notifications" element={<Notifications />} />
-        <Route path="calendar" element={<CalendarPage />} />
+        <Route path="complaints" element={<Complaints />} />
         <Route path="assignments" element={<Assignments />} />
         <Route path="fees" element={<Fees />} />
       </Route>
