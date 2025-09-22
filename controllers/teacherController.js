@@ -29,11 +29,13 @@ export const loginTeacher = async (req, res) => {
     const isMatch = await bcrypt.compare(password, teacher.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
     
-    // The payload here is already correct.
-    const payload = { 
-      id: teacher.id, 
-      email: teacher.email, 
-      role: "teacher" 
+    // --- FIX IS HERE ---
+    // 1. Create a complete payload for the JWT
+    const payload = {
+      id: teacher.id,
+      email: teacher.email,
+      name: teacher.name, // Ensure your findTeacherByEmail model returns the name
+      role: "teacher"
     };
 
     const token = jwt.sign(
@@ -42,17 +44,23 @@ export const loginTeacher = async (req, res) => {
       { expiresIn: "5h" }
     );
     
-    // --- FIX IS HERE ---
-    // Add 'role: "teacher"' to the response for the frontend.
-    res.status(200).json({ 
-      message: "Login successful", 
+    // 2. Send back a 'user' object along with the token.
+    res.status(200).json({
       token: token,
-      role: "teacher"
+      user: {
+        id: teacher.id,
+        name: teacher.name,
+        email: teacher.email,
+        role: "teacher",
+        // Note: You may need to assign a class to teachers in your DB
+        // and add it here for the attendance page to work automatically.
+        // For now, the teacher might need to select a class manually in the UI.
+        class: teacher.class || 'C-10A' // Placeholder
+      }
     });
     // --- END FIX ---
 
-  } catch (error)
-   {
+  } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };

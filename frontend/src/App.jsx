@@ -12,7 +12,7 @@ import Profile from "./pages/Profile.jsx";
 import Notifications from "./components/Notifications.jsx";
 import Complaints from "./Pages/Complaints.jsx";
 import Assignments from "./pages/Assignments.jsx";
-import Fees from "./pages/Fees.jsx";
+import AttendancePage from "./Pages/Attendance.jsx";
 
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
         <Route path="notifications" element={<Notifications />} />
         <Route path="complaints" element={<Complaints />} />
         <Route path="assignments" element={<Assignments />} />
-        <Route path="fees" element={<Fees />} />
+        <Route path="attendance" element={<AttendancePage />} />
       </Route>
 
       {/* Catch-all 404 Route */}

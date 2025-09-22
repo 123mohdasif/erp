@@ -39,12 +39,13 @@ export const loginStudent = async (req, res) => {
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
     // --- FIX IS HERE ---
-    // 1. Add 'role: "student"' to the JWT payload.
-    const payload = { 
-      id: student.id, 
-      email: student.email, 
+    // 1. Create a complete payload for the JWT
+    const payload = {
+      id: student.id,
+      email: student.email,
       name: student.name,
-      role: "student" 
+      role: student.role || "student", // Use role from DB or default
+      class: student.class
     };
 
     const token = jwt.sign(
@@ -52,12 +53,18 @@ export const loginStudent = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "5h" }
     );
-    
-    // 2. Add 'role: "student"' to the response for the frontend.
-    res.status(200).json({ 
-      message: "Login successful", 
+
+    // 2. Send back a 'user' object along with the token.
+    // This is what the frontend will store in localStorage as 'userInfo'.
+    res.status(200).json({
       token: token,
-      role: "student" 
+      user: {
+        id: student.id,
+        name: student.name,
+        email: student.email,
+        role: student.role || "student",
+        class: student.class // The class is crucial for the attendance component
+      }
     });
     // --- END FIX ---
 
@@ -66,3 +73,4 @@ export const loginStudent = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+

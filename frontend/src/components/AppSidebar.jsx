@@ -18,7 +18,7 @@ const items = [
   { title: "Notifications", url: "/dashboard/notifications", icon: Inbox },
   { title: "Complaints", url: "/dashboard/complaints", icon: Calendar },
   { title: "Assignments", url: "/dashboard/assignments", icon: Search },
-  { title: "Fees", url: "/dashboard/fees", icon: Settings },
+  { title: "Fees", url: "/dashboard/attendance", icon: Settings },
 ];
 
 export function AppSidebar() {
