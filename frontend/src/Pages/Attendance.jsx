@@ -3,7 +3,6 @@ import { Bar, BarChart, Pie, PieChart, ResponsiveContainer, Cell, XAxis, YAxis, 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -14,7 +13,6 @@ import axios from 'axios';
 
 // --- Helper Components ---
 
-// Chart for Overall Attendance Breakdown (Pie Chart)
 const AttendancePieChart = ({ data }) => {
     const chartData = useMemo(() => {
         const counts = data.reduce((acc, record) => {
@@ -53,7 +51,6 @@ const AttendancePieChart = ({ data }) => {
     );
 };
 
-// Chart for Monthly Attendance Trends (Bar Chart)
 const MonthlyBarChart = ({ data }) => {
     const chartData = useMemo(() => {
         const monthlyStats = data.reduce((acc, record) => {
@@ -92,8 +89,6 @@ const MonthlyBarChart = ({ data }) => {
     );
 };
 
-
-// View for Students
 const StudentAttendanceView = ({ attendanceData }) => (
     <div className="space-y-6">
         <div className="grid gap-6 md:grid-cols-2">
@@ -137,7 +132,6 @@ const StudentAttendanceView = ({ attendanceData }) => (
     </div>
 );
 
-// View for Teachers
 const TeacherAttendanceView = ({ classList, onSubmit }) => {
     const [date, setDate] = useState(new Date());
     const [attendance, setAttendance] = useState({});
@@ -183,7 +177,8 @@ const TeacherAttendanceView = ({ classList, onSubmit }) => {
                                 {date ? format(date, "PPP") : <span>Pick a date</span>}
                             </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
+                        {/* --- CALENDAR OVERLAP FIX --- */}
+                        <PopoverContent className="w-auto p-0 z-50 bg-white">
                             <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
                         </PopoverContent>
                     </Popover>
@@ -235,22 +230,17 @@ const TeacherAttendanceView = ({ classList, onSubmit }) => {
     );
 };
 
-
 // Main Attendance Page Component
 export default function AttendancePage() {
-    // --- ADDED LOGS FOR DEBUGGING ---
-    console.log("--- Attendance Page Initializing ---");
-    const userInfoString = localStorage.getItem('userInfo');
-    console.log("1. Raw 'userInfo' from localStorage:", userInfoString);
-    
-    const userInfo = userInfoString ? JSON.parse(userInfoString) : null;
-    console.log("2. Parsed 'userInfo' object:", userInfo);
-    
-    const token = localStorage.getItem('token');
-    console.log("3. Token from localStorage:", token);
-    
-    // --- End of Logs ---
+    // --- INFINITE LOOP FIX ---
+    // By using useMemo, this object reference remains stable between re-renders,
+    // preventing the useEffect hook from running infinitely.
+    const userInfo = useMemo(() => {
+        const userInfoString = localStorage.getItem('userInfo');
+        return userInfoString ? JSON.parse(userInfoString) : null;
+    }, []);
 
+    const token = localStorage.getItem('token');
     const role = userInfo?.role;
     const userId = userInfo?.id; 
     const classId = userInfo?.class;
@@ -263,23 +253,19 @@ export default function AttendancePage() {
     useEffect(() => {
         const fetchData = async () => {
             if (!token || !userInfo) {
-                console.error("useEffect check failed: Token or userInfo is missing. Aborting API call.");
                 setError("User information is missing. Please log in again.");
                 setLoading(false);
                 return;
             }
             
-            console.log("4. Proceeding to fetch data with user:", userInfo);
             const config = { headers: { Authorization: `Bearer ${token}` } };
             setError('');
 
             try {
                 if (role === 'student') {
-                    console.log(`Fetching student attendance for userId: ${userId}`);
                     const response = await axios.get(`/api/attendance/student/${userId}`, config);
                     setAttendanceData(response.data);
                 } else if (role === 'teacher') {
-                    console.log(`Fetching class list for classId: ${classId}`);
                     const response = await axios.get(`/api/attendance/class/${classId}`, config);
                     setClassList(response.data);
                 }
@@ -292,7 +278,7 @@ export default function AttendancePage() {
         };
 
         fetchData();
-    }, [role, userId, classId, token, userInfo]); // Added token and userInfo to dependency array for clarity
+    }, [userInfo, token, role, userId, classId]); // Dependencies are now stable
 
     const handleSubmit = async (attendancePayload) => {
         if (!token) {
@@ -330,5 +316,4 @@ export default function AttendancePage() {
         </div>
     );
 }
-
 

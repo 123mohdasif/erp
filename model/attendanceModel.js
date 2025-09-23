@@ -14,22 +14,18 @@ export const markBulkAttendance = async (attendanceData) => {
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
-
     const query = "INSERT INTO attendance (student_id, date, status, remarks) VALUES (?, ?, ?, ?)";
-
-    // Loop through each record and execute the insert query
     for (const record of attendanceData) {
       const { student_id, date, status, remarks } = record;
       await connection.query(query, [student_id, date, status, remarks]);
     }
-
-    await connection.commit(); // If all queries succeed, commit the transaction
+    await connection.commit();
     return { success: true, inserted: attendanceData.length };
   } catch (error) {
-    await connection.rollback(); // If any query fails, roll back all changes
-    throw error; // Re-throw the error to be caught by the controller
+    await connection.rollback();
+    throw error;
   } finally {
-    connection.release(); // Always release the connection back to the pool
+    connection.release();
   }
 };
 
@@ -44,8 +40,6 @@ export const getAttendanceByStudent = async (student_id) => {
 
 // Fetch all students from a specific class
 export const fetchStudentsByClass = async (classId) => {
-    // This query assumes your `students` table has a `class` column.
-    // If you used `class_id`, change the column name in the WHERE clause.
     const [rows] = await pool.query(
         "SELECT id, name, rollnumber FROM students WHERE class = ?",
         [classId]
@@ -53,4 +47,34 @@ export const fetchStudentsByClass = async (classId) => {
     return rows;
 };
 
-// Additional model functions can be added here as needed
+// --- NEWLY ADDED FUNCTIONS ---
+
+// Fetch attendance records for a specific student within a date range
+export const getAttendanceByDateRange = async (student_id, startDate, endDate) => {
+  const [rows] = await pool.query(
+    "SELECT * FROM attendance WHERE student_id = ? AND date BETWEEN ? AND ? ORDER BY date ASC",
+    [student_id, startDate, endDate]
+  );
+  return rows;
+};
+
+// Calculate and return the attendance percentage for a specific student
+export const getAttendancePercentage = async (student_id) => {
+  const [presentResult] = await pool.query(
+    "SELECT COUNT(*) as presentCount FROM attendance WHERE student_id = ? AND (status = 'Present' OR status = 'Late')",
+    [student_id]
+  );
+  const [totalResult] = await pool.query(
+    "SELECT COUNT(*) as totalCount FROM attendance WHERE student_id = ?",
+    [student_id]
+  );
+
+  const presentCount = presentResult[0].presentCount;
+  const totalCount = totalResult[0].totalCount;
+
+  if (totalCount === 0) {
+    return 0; // Avoid division by zero
+  }
+
+  return (presentCount / totalCount) * 100;
+};
