@@ -1,24 +1,34 @@
-// backend/routes/teacherRoutes.js
 import express from 'express';
-import { registerTeacher, loginTeacher } from '../controllers/teacherController.js';
-import { getProfile,updateProfile } from '../controllers/teacherController.js';
-import { protect,authorizeRoles } from './../middleware/authMiddleware.js';
-import { getTeachers } from '../controllers/teacherController.js';
+import { 
+    registerTeacher, 
+    loginTeacher, 
+    getProfile, 
+    updateProfile, 
+    getTeachers 
+} from '../controllers/teacherController.js';
+
+// --- THE CHANGE IS HERE ---
+// 1. Import the single, unified middleware function.
+import { protectAndAuthorize } from './../middleware/ass.js';
+
 const router = express.Router();
 
-// Register teacher
+// --- Public Routes (No changes) ---
+// These routes do not require a user to be logged in.
 router.post('/register', registerTeacher);
-
-// Login teacher
 router.post('/login', loginTeacher);
 
-//Profile
-router.get('/profile', protect, getProfile);
-router.put('/profile', protect, updateProfile);
-router.get('/', protect, authorizeRoles('admin'), getTeachers);// Admin: view all teachers
 
+// --- Protected Routes (Updated) ---
 
+// Profile routes: Accessible by any authenticated user (student, teacher, admin).
+// We call protectAndAuthorize() with no arguments.
+router.get('/profile', protectAndAuthorize(), getProfile);
+router.put('/profile', protectAndAuthorize(), updateProfile);
 
+// Admin-only route: View all teachers.
+// We pass the required role 'admin' to the middleware.
+router.get('/', protectAndAuthorize('admin'), getTeachers);
 
 
 export default router;
